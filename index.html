@@ -922,7 +922,7 @@
                         </select>
                     </div>
                     
-                    <button type="submit" class="w-full flex justify-center py-4 px-4 border border-transparent rounded-md shadow-sm text-lg font-medium text-white bg-tiktok-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-tiktok-teal transition duration-300">
+                    <button type="submit" id="submitButton" class="w-full flex justify-center py-4 px-4 border border-transparent rounded-md shadow-sm text-lg font-medium text-white bg-tiktok-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-tiktok-teal transition duration-300">
                         Apply to Join the Partnership
                     </button>
                 </form>
@@ -967,8 +967,15 @@
     <!-- Form Handler Script (Embedded for Reliability on Netlify) -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            console.log("Form script loaded");
             const form = document.getElementById('applicationForm');
             const submitButton = document.getElementById('submitButton');
+            
+            if (!submitButton) {
+                console.error("Submit button not found! Check HTML ID.");
+                return;
+            }
+            
             const originalButtonText = submitButton.innerHTML;
             
             // -------------------------------------------------------------------------
@@ -978,6 +985,7 @@
 
             form.addEventListener('submit', function(e) {
                 e.preventDefault(); // Stop default form submission
+                console.log("Form submitted");
 
                 // 1. Validate Form (Basic)
                 if (!form.checkValidity()) {
@@ -992,7 +1000,7 @@
                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
-                    Sending Application...
+                    Sending...
                 `;
 
                 // 3. Prepare Data
@@ -1007,12 +1015,13 @@
                 })
                 .then(() => {
                     // Since mode is 'no-cors', we assume success if no network error occurred
+                    console.log("Fetch request sent (no-cors mode)");
                     showSuccessMessage();
                     form.reset();
                 })
                 .catch(error => {
                     console.error('Error!', error.message);
-                    alert("Submission failed. Please try again or contact us directly via Telegram.");
+                    alert("Submission failed. Please try again.");
                 })
                 .finally(() => {
                     submitButton.disabled = false;
